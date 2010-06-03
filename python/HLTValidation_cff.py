@@ -30,6 +30,13 @@ hltvalidation = cms.Sequence(
     +HiggsValidationSequence
     )
 
+
+# additional producer sequence prior to hltvalidation_fastsim
+# to evacuate producers from the EndPath
+hltassociation_fastsim = cms.Sequence(
+  HLTMuonAss_FastSim
+)
+
 hltvalidation_fastsim = cms.Sequence(
      HLTMuonVal_FastSim
     +HLTTauVal
@@ -51,6 +58,15 @@ hltvalidation_preprod = cms.Sequence(
   +HLTSusyExoValSeq
  #+HiggsValidationSequence
  )
+
+hltvalidation_preprod_fastsim = cms.Sequence(
+ HLTTauVal
+ +HLTTopVal
+ +HLTFourVector
+ +heavyFlavorValidationSequence
+ +HLTSusyExoValSeq_FastSim
+#+HiggsValidationSequence
+)
 
 hltvalidation_prod = cms.Sequence(
   HLTFourVector
