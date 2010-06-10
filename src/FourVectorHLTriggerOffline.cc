@@ -1,4 +1,4 @@
-// $Id: FourVectorHLTriggerOffline.cc,v 1.34 2009/12/29 21:55:29 nuno Exp $
+// $Id: FourVectorHLTriggerOffline.cc,v 1.37 2010/02/25 19:37:26 wdd Exp $
 // See header file for information. 
 #include "TMath.h"
 #include "HLTriggerOffline/Common/interface/FourVectorHLTriggerOffline.h"
@@ -546,10 +546,11 @@ void FourVectorHLTriggerOffline::beginRun(const edm::Run& run, const edm::EventS
 {
   LogDebug("FourVectorHLTriggerOffline") << "beginRun, run " << run.id();
 // HLT config does not change within runs!
- 
-  if (!hltConfig_.init(processname_)) {
+
+  bool changed(false);  
+  if (!hltConfig_.init(run, c, processname_, changed)) {
     processname_ = "FU";
-    if (!hltConfig_.init(processname_)){
+    if (!hltConfig_.init(run, c, processname_, changed)){
   LogDebug("FourVectorHLTriggerOffline") << "HLTConfigProvider failed to initialize.";
     }
     // check if trigger name in (new) config
