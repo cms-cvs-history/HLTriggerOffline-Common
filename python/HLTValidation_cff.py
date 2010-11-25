@@ -17,6 +17,10 @@ from DQMOffline.Trigger.EgHLTOfflineSource_cfi import *
 # online dqm:
 from DQM.HLTEvF.HLTMonTau_cfi import *
 
+# additional producer sequence prior to hltvalidation
+# to evacuate producers/filters from the EndPath
+hltassociation = cms.Sequence( egammaSelectors )
+
 hltvalidation = cms.Sequence(
     HLTMuonVal
     +HLTTauVal
@@ -34,13 +38,15 @@ hltvalidation = cms.Sequence(
 # additional producer sequence prior to hltvalidation_fastsim
 # to evacuate producers from the EndPath
 hltassociation_fastsim = cms.Sequence(
-  HLTMuonAss_FastSim
+    HLTMuonAss_FastSim
+  + egammaSelectors
+  + hltTauRef
 )
 
 hltvalidation_fastsim = cms.Sequence(
      HLTMuonVal_FastSim
-    +HLTTauVal
-    +egammaValidationSequence
+    +HLTTauValFS
+    +egammaValidationSequenceFS
     +HLTTopVal
     +HLTFourVector
     +heavyFlavorValidationSequence
