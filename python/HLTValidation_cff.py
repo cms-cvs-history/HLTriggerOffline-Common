@@ -1,6 +1,6 @@
 from HLTriggerOffline.Muon.HLTMuonVal_cff import *
 from HLTriggerOffline.Tau.Validation.HLTTauValidation_cff import *
-from HLTriggerOffline.Egamma.EgammaValidation_cff import *
+from HLTriggerOffline.Egamma.EgammaValidationAutoConf_cff import *
 from HLTriggerOffline.Top.topvalidation_cfi import *
 from HLTriggerOffline.Common.FourVectorHLTriggerOffline_cff import *
 from HLTriggerOffline.HeavyFlavor.heavyFlavorValidationSequence_cff import *
@@ -16,6 +16,11 @@ from DQMOffline.Trigger.EgHLTOfflineSource_cfi import *
 #from DQMOffline.Trigger.MuonTrigRateAnalyzer_cfi import *
 # online dqm:
 from DQM.HLTEvF.HLTMonTau_cfi import *
+
+# additional producer sequence prior to hltvalidation
+# to evacuate producers/filters from the EndPath
+hltassociation = cms.Sequence( egammaSelectors )
+
 
 hltvalidation = cms.Sequence(
     HLTMuonVal
@@ -34,13 +39,15 @@ hltvalidation = cms.Sequence(
 # additional producer sequence prior to hltvalidation_fastsim
 # to evacuate producers from the EndPath
 hltassociation_fastsim = cms.Sequence(
-  HLTMuonAss_FastSim
+    HLTMuonAss_FastSim
+  + egammaSelectors
+  + hltTauRef
 )
 
 hltvalidation_fastsim = cms.Sequence(
      HLTMuonVal_FastSim
-    +HLTTauVal
-    +egammaValidationSequence
+    +HLTTauValFS
+    +egammaValidationSequenceFS
     +HLTTopVal
     +HLTFourVector
     +heavyFlavorValidationSequence
